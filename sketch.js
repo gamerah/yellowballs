@@ -6,8 +6,8 @@ var max_balls_in_wave = 20;
 var balls_in_this_wave = 0;
 var last_spawn = 0;
 var spawn_period = 1000;
-var mongolo1;
-var mongolo2;
+var txoropito1;
+var txoropito2;
 var r = 255,
   g = 0,
   b = 0,
@@ -16,8 +16,8 @@ var r = 255,
 function setup() {
   createCanvas(displayWidth, displayHeight);
   ball = [];
-  mongolo1 = new mongolo(+1);
-  mongolo2 = new mongolo(-1);
+  txoropito1 = new txoropito(+1);
+  txoropito2 = new txoropito(-1);
   noStroke();
 }
 
@@ -62,11 +62,11 @@ function draw() {
     displayHeight * 6.8
   );
   if (lives > 0) {
-    mongolo1.move();
-    mongolo2.move();
+    txoropito1.move();
+    txoropito2.move();
   }
-  mongolo1.display();
-  mongolo2.display();
+  txoropito1.display();
+  txoropito2.display();
   ball.forEach(function (b) {
     if (lives > 0) {
       b.move();
@@ -74,7 +74,10 @@ function draw() {
     b.display();
   });
   for (var i = ball.length - 1; i >= 0; i--) {
-    if (ball[i].y > mongolo1.y + ball[i].diameter && ball[i].was_hit !== true) {
+    if (
+      ball[i].y > txoropito1.y + ball[i].diameter &&
+      ball[i].was_hit !== true
+    ) {
       ball[i].color = color(200, 150, 50);
       if (ball[i].was_scored !== true && lives > 0) {
         score = score + 1;
@@ -102,7 +105,7 @@ function draw() {
   }
 }
 
-function mongolo(sign) {
+function txoropito(sign) {
   this.x = displayWidth / 2;
   this.y = displayHeight - displayHeight / 6;
   this.color = color(100, 200, 255);
@@ -159,10 +162,10 @@ function yellowBall(sign, span) {
     this.x = this.x + this.xspeed;
     this.y = this.y + this.yspeed;
     if (
-      dist(this.x, this.y, mongolo1.x, mongolo1.y) <
-        this.diameter / 2 + mongolo1.diameter / 2 ||
-      dist(this.x, this.y, mongolo2.x, mongolo2.y) <
-        this.diameter / 2 + mongolo2.diameter / 2
+      dist(this.x, this.y, txoropito1.x, txoropito1.y) <
+        this.diameter / 2 + txoropito1.diameter / 2 ||
+      dist(this.x, this.y, txoropito2.x, txoropito2.y) <
+        this.diameter / 2 + txoropito2.diameter / 2
     ) {
       this.color = color(255, 0, 0);
       if (this.was_hit !== true) {
