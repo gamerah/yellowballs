@@ -1,7 +1,7 @@
 // Tiny Yellow Balls
 // A Gamerah Project
 
-var offsetX, offsetY, windowMinSide;  // Responsive canvas setup
+var offsetX, offsetY, windowMinSide; // Responsive canvas setup
 var current_wave = 1;
 var score = 0;
 var lives = 3;
@@ -18,7 +18,6 @@ var r = 255,
   colorsign = +1;
 
 function setup() {
-
   // Canvas
   createCanvas(displayWidth, displayHeight);
   windowResized();
@@ -28,8 +27,6 @@ function setup() {
   txoropito1 = new txoropito(+1);
   txoropito2 = new txoropito(-1);
   noStroke();
-  
-
 }
 
 function windowResized() {
@@ -40,8 +37,7 @@ function windowResized() {
 
   // Setting the display height and width based on the window height
   displayHeight = windowHeight;
-  displayWidth = windowHeight * 0.5625;  // Ratio 9:16
-  
+  displayWidth = windowHeight * 0.5625; // Ratio 9:16
 }
 
 // Fullscreen code taken from @takawo
@@ -57,13 +53,11 @@ function windowResized() {
 }*/
 
 function draw() {
-
   background(192);
   push();
   //translate(offsetX, offsetY);
-  rect(0, 0, displayWidth, displayHeight);  // red rectangle
+  rect(0, 0, displayWidth, displayHeight); // red rectangle
   pop();
-
 
   // console.log("balls:" + ball.length + " max_balls_in_wave:" + max_balls_in_wave + ' since last_spawn:' + (millis() - last_spawn));
   if (ball.length < max_balls_in_wave && millis() - last_spawn > spawn_period) {
@@ -84,7 +78,6 @@ function draw() {
     max_balls_in_wave = max_balls_in_wave + 10;
     spawn_period = spawn_period - 50;
   }
-    
 
   fill(r, g, b);
   ellipse(
@@ -118,10 +111,10 @@ function draw() {
     b.display();
   });
   for (var i = ball.length - 1; i >= 0; i--) {
-      if (
-          ball[i].y > txoropito1.y + ball[i].diameter &&
-          ball[i].was_hit !== true
-      ) {
+    if (
+      ball[i].y > txoropito1.y + ball[i].diameter &&
+      ball[i].was_hit !== true
+    ) {
       ball[i].color = color(200, 150, 50);
       if (ball[i].was_scored !== true && lives > 0) {
         score = score + 1;
