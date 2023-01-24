@@ -15,10 +15,6 @@ var last_spawn = 0;
 var spawn_period = 1000;
 var txoropito1;
 var txoropito2;
-var r = 255,
-  g = 0,
-  b = 0,
-  colorsign = +1;
 
 function setup() {
   // The canvas should cover the whole viewport
@@ -64,21 +60,21 @@ function draw() {
     spawn_period = spawn_period - 50;
   }
 
-  fill(r, g, b);
+  // Red sun
+  fill(255, 0, 0);
   ellipse(subW / 5, subH / 12, subW / 5, subW / 5);
-  if (g > 100 || g < 0) {
-    colorsign = -colorsign;
-  }
-  g = g + colorsign;
-  b = b + colorsign;
+
+  // Black horizon
   fill(0);
   ellipse(subW / 2, subH * 4, subH * 6.8, subH * 6.8);
+
   if (lives > 0) {
     txoropito1.move();
     txoropito2.move();
   }
   txoropito1.display();
   txoropito2.display();
+
   ball.forEach(function (b) {
     if (lives > 0) {
       b.move();
