@@ -6,7 +6,6 @@
 // (not really a canvas itself, just the area we draw onto)
 var offsetX, offsetY, subW, subH;
 
-var current_wave = 1;
 var score = 0;
 var lives = 3;
 var ball;
@@ -61,7 +60,6 @@ function draw() {
     last_spawn = millis();
   }
   if (ball.length >= max_balls_in_wave && millis() - last_spawn > 5000) {
-    current_wave = current_wave + 1;
     max_balls_in_wave = max_balls_in_wave + 10;
     spawn_period = spawn_period - 50;
   }
