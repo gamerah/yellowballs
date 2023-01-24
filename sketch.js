@@ -6,7 +6,6 @@
 // (not really a canvas itself, just the area we draw onto)
 var offsetX, offsetY, subW, subH;
 
-var current_wave = 1;
 var score = 0;
 var lives = 3;
 var ball;
@@ -16,10 +15,6 @@ var last_spawn = 0;
 var spawn_period = 1000;
 var txoropito1;
 var txoropito2;
-var r = 255,
-  g = 0,
-  b = 0,
-  colorsign = +1;
 
 function setup() {
   // The canvas should cover the whole viewport
@@ -61,26 +56,25 @@ function draw() {
     last_spawn = millis();
   }
   if (ball.length >= max_balls_in_wave && millis() - last_spawn > 5000) {
-    current_wave = current_wave + 1;
     max_balls_in_wave = max_balls_in_wave + 10;
     spawn_period = spawn_period - 50;
   }
 
-  fill(r, g, b);
+  // Red sun
+  fill(255, 0, 0);
   ellipse(subW / 5, subH / 12, subW / 5, subW / 5);
-  if (g > 100 || g < 0) {
-    colorsign = -colorsign;
-  }
-  g = g + colorsign;
-  b = b + colorsign;
+
+  // Black horizon
   fill(0);
   ellipse(subW / 2, subH * 4, subH * 6.8, subH * 6.8);
+
   if (lives > 0) {
     txoropito1.move();
     txoropito2.move();
   }
   txoropito1.display();
   txoropito2.display();
+
   ball.forEach(function (b) {
     if (lives > 0) {
       b.move();
@@ -122,94 +116,84 @@ function draw() {
   pop();
 }
 
-function txoropito(sign) {
-  push();
-  // Everything we draw after `translate` will be added the given offsets
-  translate(offsetX, offsetY);
+class txoropito {
+  constructor(sign) {
+    this.x = subW / 2;
+    this.y = subH - subH / 6;
 
-  this.x = subW / 2;
-  this.y = subH - subH / 6;
+    this.x = displayWidth / 2;
+    this.y = displayHeight - displayHeight / 6;
 
-  this.x = displayWidth / 2;
-  this.y = displayHeight - displayHeight / 6;
-  
-  this.color = color(100, 200, 255);
-  this.diameter = subW / 16;
-  this.speed = (sign * subW) / 128;
+    this.color = color(100, 200, 255);
+    this.diameter = subW / 16;
+    this.speed = (sign * subW) / 128;
 
-  this.move = function () {
-    if (mouseIsPressed || keyIsPressed) {
-      this.x = this.x + this.speed;
-    } else {
-      this.x = this.x - this.speed;
-    }
-    if (this.speed > 0 && this.x < subW / 2 + this.diameter / 2) {
-      this.x = subW / 2 + this.diameter / 2;
-    } else if (this.speed < 0 && this.x > subW / 2 - this.diameter / 2) {
-      this.x = subW / 2 - this.diameter / 2;
-    }
-    if (this.x > subW - this.diameter / 2) {
-      this.x = subW - this.diameter / 2;
-    } else if (this.x < this.diameter / 2) {
-      this.x = this.diameter / 2;
-    }
-  };
+    this.move = function () {
+      if (mouseIsPressed || keyIsPressed) {
+        this.x = this.x + this.speed;
+      } else {
+        this.x = this.x - this.speed;
+      }
+      if (this.speed > 0 && this.x < subW / 2 + this.diameter / 2) {
+        this.x = subW / 2 + this.diameter / 2;
+      } else if (this.speed < 0 && this.x > subW / 2 - this.diameter / 2) {
+        this.x = subW / 2 - this.diameter / 2;
+      }
+      if (this.x > subW - this.diameter / 2) {
+        this.x = subW - this.diameter / 2;
+      } else if (this.x < this.diameter / 2) {
+        this.x = this.diameter / 2;
+      }
+    };
 
-  this.display = function () {
-    fill(this.color);
-    rect(
-      this.x - this.diameter / 2,
-      this.y - this.diameter / 2,
-      this.diameter,
-      this.diameter
-    );
-  };
-
-  // Revert the effects of `translate` by going back to the previous offset checkpoint
-  pop();
+    this.display = function () {
+      fill(this.color);
+      this.diameter = subW / 16;
+      rect(
+        this.x - this.diameter / 2,
+        this.y - this.diameter / 2,
+        this.diameter,
+        this.diameter
+      );
+    };
+  }
 }
 
-function yellowBall(sign, span) {
-  push();
-  // Everything we draw after `translate` will be added the given offsets
-  translate(offsetX, offsetY);
-
-  this.was_hit = false;
-  this.was_scored = false;
-  this.diameter = subW / 20;
-  this.color = color(255, 204, 0);
-  this.x = subW / 5;
-  this.y = subH / 12;
-  var framestofall = 300;
-  this.yspeed = (subH * (1 - this.y / subH - 1 / 6)) / framestofall;
-  var destination = (subW * (1 + sign * span)) / 2;
-  this.xspeed = (destination - this.x) / framestofall;
-  // console.log('span:' + sign * span + ' destination:' + destination + ' xspeed:' + this.xspeed);
-
-  this.move = function () {
-    this.x = this.x + this.xspeed;
-    this.y = this.y + this.yspeed;
-    if (
-      dist(this.x, this.y, txoropito1.x, txoropito1.y) <
-        this.diameter / 2 + txoropito1.diameter / 2 ||
-      dist(this.x, this.y, txoropito2.x, txoropito2.y) <
-        this.diameter / 2 + txoropito2.diameter / 2
-    ) {
-      this.color = color(255, 0, 0);
-      if (this.was_hit !== true) {
-        lives = lives - 1;
+class yellowBall {
+  constructor(sign, span) {
+    this.was_hit = false;
+    this.was_scored = false;
+    this.diameter = subW / 20;
+    this.color = color(255, 204, 0);
+    this.x = subW / 5;
+    this.y = subH / 12;
+    var framestofall = 300;
+    this.yspeed = (subH * (1 - this.y / subH - 1 / 6)) / framestofall;
+    var destination = (subW * (1 + sign * span)) / 2;
+    this.xspeed = (destination - this.x) / framestofall;
+    // console.log('span:' + sign * span + ' destination:' + destination + ' xspeed:' + this.xspeed);
+    this.move = function () {
+      this.x = this.x + this.xspeed;
+      this.y = this.y + this.yspeed;
+      if (
+        dist(this.x, this.y, txoropito1.x, txoropito1.y) <
+          this.diameter / 2 + txoropito1.diameter / 2 ||
+        dist(this.x, this.y, txoropito2.x, txoropito2.y) <
+          this.diameter / 2 + txoropito2.diameter / 2
+      ) {
+        this.color = color(255, 0, 0);
+        if (this.was_hit !== true) {
+          lives = lives - 1;
+        }
+        this.was_hit = true;
       }
-      this.was_hit = true;
-    }
-  };
+    };
 
-  this.display = function () {
-    fill(this.color);
-    ellipse(this.x, this.y, this.diameter, this.diameter);
-  };
-
-  // Revert the effects of `translate` by going back to the previous offset checkpoint
-  pop();
+    this.display = function () {
+      fill(this.color);
+      ellipse(this.x, this.y, this.diameter, this.diameter);
+    };
+  }
 }
 
 function windowResized() {
