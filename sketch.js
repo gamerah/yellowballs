@@ -129,6 +129,10 @@ function txoropito(sign) {
 
   this.x = subW / 2;
   this.y = subH - subH / 6;
+
+  this.x = displayWidth / 2;
+  this.y = displayHeight - displayHeight / 6;
+  
   this.color = color(100, 200, 255);
   this.diameter = subW / 16;
   this.speed = (sign * subW) / 128;
