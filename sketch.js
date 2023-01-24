@@ -118,10 +118,6 @@ function draw() {
 
 class txoropito {
   constructor(sign) {
-    push();
-    // Everything we draw after `translate` will be added the given offsets
-    translate(offsetX, offsetY);
-
     this.x = subW / 2;
     this.y = subH - subH / 6;
 
@@ -152,6 +148,7 @@ class txoropito {
 
     this.display = function () {
       fill(this.color);
+      this.diameter = subW / 16;
       rect(
         this.x - this.diameter / 2,
         this.y - this.diameter / 2,
@@ -159,18 +156,11 @@ class txoropito {
         this.diameter
       );
     };
-
-    // Revert the effects of `translate` by going back to the previous offset checkpoint
-    pop();
   }
 }
 
 class yellowBall {
   constructor(sign, span) {
-    push();
-    // Everything we draw after `translate` will be added the given offsets
-    translate(offsetX, offsetY);
-
     this.was_hit = false;
     this.was_scored = false;
     this.diameter = subW / 20;
@@ -203,9 +193,6 @@ class yellowBall {
       fill(this.color);
       ellipse(this.x, this.y, this.diameter, this.diameter);
     };
-
-    // Revert the effects of `translate` by going back to the previous offset checkpoint
-    pop();
   }
 }
 
