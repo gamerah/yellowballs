@@ -38,9 +38,20 @@ function draw() {
   push();
   // Everything we draw after `translate` will be added the given offsets
   translate(offsetX, offsetY);
+
   // Draw a white rectangle covering the 9x16 area
   rect(0, 0, subW, subH);
 
+  drawBackground();
+  drawBalls();
+  drawTxoropitos();
+  drawScore();
+
+  // Revert the effects of `translate` by going back to the previous offset checkpoint
+  pop();
+}
+
+function drawBalls() {
   // console.log("balls:" + ball.length + " max_balls_in_wave:" + max_balls_in_wave + ' since last_spawn:' + (millis() - last_spawn));
   if (ball.length < max_balls_in_wave && millis() - last_spawn > spawn_period) {
     var span = Math.random();
@@ -59,21 +70,6 @@ function draw() {
     max_balls_in_wave = max_balls_in_wave + 10;
     spawn_period = spawn_period - 50;
   }
-
-  // Red sun
-  fill(255, 0, 0);
-  ellipse(subW / 5, subH / 12, subW / 5, subW / 5);
-
-  // Black horizon
-  fill(0);
-  ellipse(subW / 2, subH * 4, subH * 6.8, subH * 6.8);
-
-  if (lives > 0) {
-    txoropito1.move();
-    txoropito2.move();
-  }
-  txoropito1.display();
-  txoropito2.display();
 
   ball.forEach(function (b) {
     if (lives > 0) {
@@ -98,6 +94,19 @@ function draw() {
       ball.splice(i, 1);
     }
   }
+}
+
+function drawBackground() {
+  // Red sun
+  fill(255, 0, 0);
+  ellipse(subW / 5, subH / 12, subW / 5, subW / 5);
+
+  // Black horizon
+  fill(0);
+  ellipse(subW / 2, subH * 4, subH * 6.8, subH * 6.8);
+}
+
+function drawScore() {
   fill(0);
   text(score, subW / 20, subH / 12);
   var lives_cache = lives;
@@ -111,9 +120,15 @@ function draw() {
   if (lives < 1) {
     text("UR REKT", subW - subW / 6, subH / 12);
   }
+}
 
-  // Revert the effects of `translate` by going back to the previous offset checkpoint
-  pop();
+function drawTxoropitos() {
+  if (lives > 0) {
+    txoropito1.move();
+    txoropito2.move();
+  }
+  txoropito1.display();
+  txoropito2.display();
 }
 
 class txoropito {
