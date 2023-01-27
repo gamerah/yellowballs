@@ -133,11 +133,10 @@ function drawTxoropitos() {
 
 class txoropito {
   constructor(sign) {
+    // `x` and `y` are the position in pixels within the subcanvas
     this.x = subW / 2;
     this.y = subH - subH / 6;
 
-    this.x = displayWidth / 2;
-    this.y = displayHeight - displayHeight / 6;
 
     this.color = color(100, 200, 255);
     this.diameter = subW / 16;
@@ -162,8 +161,9 @@ class txoropito {
     };
 
     this.display = function () {
-      fill(this.color);
+      this.y = subH - subH / 6;
       this.diameter = subW / 16;
+      fill(this.color);
       rect(
         this.x - this.diameter / 2,
         this.y - this.diameter / 2,
