@@ -137,12 +137,12 @@ class txoropito {
     this.x = subW / 2;
     this.y = subH - subH / 6;
 
-
     this.color = color(100, 200, 255);
     this.diameter = subW / 16;
     this.speed = (sign * subW) / 128;
 
     this.move = function () {
+      this.speed = (sign * subW) / 128;
       if (mouseIsPressed || keyIsPressed) {
         this.x = this.x + this.speed;
       } else {
@@ -176,18 +176,21 @@ class txoropito {
 
 class yellowBall {
   constructor(sign, span) {
+    this.sign = sign;
+    this.span = span;
     this.was_hit = false;
     this.was_scored = false;
     this.diameter = subW / 20;
     this.color = color(255, 204, 0);
     this.x = subW / 5;
     this.y = subH / 12;
-    var framestofall = 300;
-    this.yspeed = (subH * (1 - this.y / subH - 1 / 6)) / framestofall;
-    var destination = (subW * (1 + sign * span)) / 2;
-    this.xspeed = (destination - this.x) / framestofall;
-    // console.log('span:' + sign * span + ' destination:' + destination + ' xspeed:' + this.xspeed);
+
     this.move = function () {
+      var framestofall = 300;
+      this.yspeed = (subH * (1 - this.y / subH - 1 / 6)) / framestofall;
+      var destination = (subW * (1 + this.sign * this.span)) / 2;
+      this.xspeed = (destination - this.x) / framestofall;
+
       this.x = this.x + this.xspeed;
       this.y = this.y + this.yspeed;
       if (
@@ -205,6 +208,7 @@ class yellowBall {
     };
 
     this.display = function () {
+      this.diameter = subW / 20;
       fill(this.color);
       ellipse(this.x, this.y, this.diameter, this.diameter);
     };
