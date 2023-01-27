@@ -187,9 +187,9 @@ class yellowBall {
 
     this.move = function () {
       var framestofall = 300;
-      this.yspeed = (subH * (1 - this.y / subH - 1 / 6)) / framestofall;
+      this.yspeed = (subH * (1 - subH / 12 / subH - 1 / 6)) / framestofall;
       var destination = (subW * (1 + this.sign * this.span)) / 2;
-      this.xspeed = (destination - this.x) / framestofall;
+      this.xspeed = (destination - subW / 5) / framestofall;
 
       this.x = this.x + this.xspeed;
       this.y = this.y + this.yspeed;
