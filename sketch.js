@@ -135,6 +135,12 @@ function drawScore() {
   if (lives < 1) {
     text("UR REKT", subW - subW / 6, subH / 12);
   }
+  if (
+    gameover_time != null &&
+    millis() > gameover_time + gameover_retry_waiting_time - 200
+  ) {
+    text("RETRY", subW / 2, subH / 2);
+  }
 }
 
 function drawTxoropitos() {
@@ -268,8 +274,9 @@ function mousePressed() {
   if (
     gameover_time != null &&
     millis() > gameover_time + gameover_retry_waiting_time
-  )
+  ) {
     setup();
+  }
 }
 function keyPressed() {
   mousePressed();
