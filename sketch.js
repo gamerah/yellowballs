@@ -4,19 +4,34 @@
 // `offsetX`, `offsetY`: the offset where our 9x16 "subcanvas" will be drawn
 // `subW`, `subH`: dimensions of our "subcanvas"
 // (not really a canvas itself, just the area we draw onto)
-var offsetX, offsetY, subW, subH;
+let offsetX, offsetY, subW, subH;
 
-var score = 0;
-var lives = 3;
-var ball;
-var max_balls_in_wave = 20;
-var balls_in_this_wave = 0;
-var last_spawn = 0;
-var spawn_period = 1000;
-var txoropito1;
-var txoropito2;
+// Ball instance
+let ball;
+// Txoropito instances
+let txoropito1, txoropito2;
+
+// Variables to reset after each game
+let score,
+  lives,
+  max_balls_in_wave,
+  balls_in_this_wave,
+  last_spawn,
+  spawn_period;
+
+// Time when game over happened
+let gameover_time;
+// Time to wait after game over, before retrying
+const gameover_retry_waiting_time = 3000;
 
 function setup() {
+  gameover_time = null;
+  score = 0;
+  lives = 3;
+  max_balls_in_wave = 20;
+  balls_in_this_wave = 0;
+  last_spawn = 0;
+  spawn_period = 1000;
   // The canvas should cover the whole viewport
   createCanvas(windowWidth, windowHeight);
   // `windowResized` is automatically called by p5.js on window resized events,
@@ -120,6 +135,12 @@ function drawScore() {
   if (lives < 1) {
     text("UR REKT", subW - subW / 6, subH / 12);
   }
+  if (
+    gameover_time != null &&
+    millis() > gameover_time + gameover_retry_waiting_time - 200
+  ) {
+    text("RETRY", subW / 2, subH / 2);
+  }
 }
 
 function drawTxoropitos() {
@@ -202,6 +223,9 @@ class yellowBall {
         this.color = color(255, 0, 0);
         if (this.was_hit !== true) {
           lives = lives - 1;
+          if (gameover_time === null && lives < 1) {
+            gameover_time = millis();
+          }
         }
         this.was_hit = true;
       }
@@ -244,4 +268,16 @@ function windowResized() {
   // Initialize the offsets for `translate`
   offsetX = (windowWidth - subW) / 2;
   offsetY = (windowHeight - subH) / 2;
+}
+
+function mousePressed() {
+  if (
+    gameover_time != null &&
+    millis() > gameover_time + gameover_retry_waiting_time
+  ) {
+    setup();
+  }
+}
+function keyPressed() {
+  mousePressed();
 }
