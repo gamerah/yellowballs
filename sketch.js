@@ -121,7 +121,6 @@ function drawScore() {
   }
   fill(255, 0, 0);
   textAlign(RIGHT);
-  textSize(0.04 * subW);
   text(lives_str, subW - subW / 10, subH / 12);
   if (lives < 1) {
     text("UR REKT", subW - subW / 10, subH / 12);
