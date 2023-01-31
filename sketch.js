@@ -122,8 +122,12 @@ function drawBackground() {
 }
 
 function drawScore() {
+  // Score
   fill(0);
+  textSize(0.04 * subW);
   text(score, subW / 20, subH / 12);
+
+  // Hearts
   var lives_cache = lives;
   var lives_str = "";
   while (lives_cache > 0) {
@@ -131,9 +135,10 @@ function drawScore() {
     lives_cache = lives_cache - 1;
   }
   fill(255, 0, 0);
-  text(lives_str, subW - subW / 8, subH / 12);
+  textAlign(RIGHT);
+  text(lives_str, subW - subW / 10, subH / 12);
   if (lives < 1) {
-    text("UR REKT", subW - subW / 6, subH / 12);
+    text("UR REKT", subW - subW / 10, subH / 12);
   }
   if (
     gameover_time != null &&
