@@ -1,0 +1,22 @@
+{
+    "frames": [{
+        "name": "ballmer-fr1",
+        "position": {
+          "x": 360,
+          "y": 0,
+          "w": 360,
+          "h": 400
+        }
+      },
+      {
+        "name": "ballmer-fr2 ",
+        "position": {
+          "x": 720,
+          "y": 0,
+          "w": 360,
+          "h": 400
+        }
+      }
+    ]
+  }
+  

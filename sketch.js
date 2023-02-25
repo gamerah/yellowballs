@@ -24,6 +24,16 @@ let gameover_time;
 // Time to wait after game over, before retrying
 const gameover_retry_waiting_time = 3000;
 
+// Preload images form the spritesheet
+let spritedata;
+let spritesheet;
+
+function preload() {
+  spritedata = loadJSON('ballmer.json');
+  spritesheet = loadImage('assets/ballmer.png');
+}
+
+
 function setup() {
   gameover_time = null;
   score = 0;
@@ -44,6 +54,8 @@ function setup() {
   txoropito1 = new txoropito(+1);
   txoropito2 = new txoropito(-1);
   noStroke();
+
+  console.log(spritedata);
 }
 
 function draw() {
@@ -61,6 +73,7 @@ function draw() {
   drawBalls();
   drawTxoropitos();
   drawScore();
+  image(spritesheet, 0, 0);
 
   // Revert the effects of `translate` by going back to the previous offset checkpoint
   pop();
