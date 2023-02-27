@@ -29,10 +29,9 @@ let spritedata;
 let spritesheet;
 
 function preload() {
-  spritedata = loadJSON('ballmer.json');
-  spritesheet = loadImage('assets/ballmer.png');
+  spritedata = loadJSON("assets/ballmer.json");
+  spritesheet = loadImage("assets/ballmer.png");
 }
-
 
 function setup() {
   gameover_time = null;
